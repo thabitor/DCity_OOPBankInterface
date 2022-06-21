@@ -17,11 +17,6 @@ public class Programme {
         }
 
 
-        int[] tab = {1,2,3};
-
-        tab[1] = 5;
-
-
     }
 
 }
