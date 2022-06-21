@@ -1,18 +1,17 @@
 package bstorm.akimts.oo.avance.exo;
 
-import java.time.LocalDate;
 import java.util.Random;
 
-public class Sportif {
+abstract class Sportif {
 
     private String nom;
     private String prenom;
-    private LocalDate dateNaiss;
+    private Integer anneeNaiss;
 
-    public Sportif(String nom, String prenom, LocalDate dateNaiss) {
+    public Sportif(String nom, String prenom, Integer anneeNaiss) {
         this.nom = nom;
         this.prenom = prenom;
-        this.dateNaiss = dateNaiss;
+        this.anneeNaiss = anneeNaiss;
     }
 
     public int performer() {
@@ -35,11 +34,11 @@ public class Sportif {
         this.prenom = prenom;
     }
 
-    public LocalDate getDateNaiss() {
-        return dateNaiss;
+    public Integer getAnneeNaiss() {
+        return anneeNaiss;
     }
 
-    public void setDateNaiss(LocalDate dateNaiss) {
-        this.dateNaiss = dateNaiss;
+    public void setAnneeNaiss(Integer anneeNaiss) {
+        this.anneeNaiss = anneeNaiss;
     }
 }
