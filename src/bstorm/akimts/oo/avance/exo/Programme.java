@@ -1,0 +1,27 @@
+package bstorm.akimts.oo.avance.exo;
+
+import bstorm.akimts.oo.avance.exo.exceptions.EtatCompetitionException;
+
+public class Programme {
+
+    public static void main(String[] args) {
+
+        CompetitionImpl compet = new CompetitionImpl(5);
+        compet.lancer();
+
+        try {
+            compet.inscrire(new Sportif("", "", null));
+        }
+        catch(EtatCompetitionException ex) {
+            ex.printStackTrace();
+        }
+
+
+        int[] tab = {1,2,3};
+
+        tab[1] = 5;
+
+
+    }
+
+}

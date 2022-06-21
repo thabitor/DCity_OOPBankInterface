@@ -1,6 +1,4 @@
-package bstorm.akimts.oo.avance;
-
-import java.io.IOException;
+package bstorm.akimts.oo.avance.demo;
 
 public class Programme {
 

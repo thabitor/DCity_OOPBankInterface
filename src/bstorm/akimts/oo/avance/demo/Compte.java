@@ -1,7 +1,7 @@
-package bstorm.akimts.oo.avance;
+package bstorm.akimts.oo.avance.demo;
 
-import bstorm.akimts.oo.avance.exceptions.MontantNegatifException;
-import bstorm.akimts.oo.avance.exceptions.SoldeInsuffisantException;
+import bstorm.akimts.oo.avance.demo.exceptions.MontantNegatifException;
+import bstorm.akimts.oo.avance.demo.exceptions.SoldeInsuffisantException;
 
 public class Compte {
 
