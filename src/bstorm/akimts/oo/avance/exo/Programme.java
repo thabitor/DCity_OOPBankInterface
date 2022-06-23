@@ -16,7 +16,7 @@ public class Programme {
             compet.register(new Judoka("Noyo", "brun", 1985));
 
             javos.register(new LanceurJavelot("Marcelo", "James", 1985));
-            javos.register(new LanceurJavelot("Rodrigez", "Nolan", 1985));
+            javos.register(new LanceurJavelot("Chidi", "Nolan", 1985));
             javos.register(new LanceurJavelot("Max", "Noyo", 1985));
 
             cooru.register(new Coureur("Chidi", "Strong", 1985));
