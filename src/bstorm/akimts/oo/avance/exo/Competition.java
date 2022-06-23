@@ -8,18 +8,28 @@ import java.util.*;
 public class Competition<S extends Sportif> implements iCompetition<S> {
 
     private final int limiteParticipant;
+
+    private static Localisation localisation;
     private final Map<S, Integer> participants = new HashMap<>();
     private List<S> classements;
+    private double award;
 
-    public Competition() {
-        limiteParticipant = 0;
+    public Competition(Localisation localisation) {
+        this.localisation = localisation;
+        this.limiteParticipant = localisation.getParticpants();
+        this.award = localisation.getAward();
     }
-
 
     public Competition(int limiteParticipant) {
         if(limiteParticipant < 0)
             throw new IllegalArgumentException("la limite de participant invalide (devrait être positive");
         this.limiteParticipant = limiteParticipant;
+    }
+
+    public Competition(int limiteParticipant, double award) {
+        this.limiteParticipant = limiteParticipant;
+        this.award = award;
+        this.localisation = null;
     }
 
     @Override
@@ -34,14 +44,17 @@ public class Competition<S extends Sportif> implements iCompetition<S> {
             throw new IllegalStateException("La compet n'a pas de participants");
 
         for (S s : participants.keySet()) {
-            participants.put(s, s.performer());
+            int score = s.performer();
+            participants.put(s, score);
+            System.out.println(s + " Score: " + score);
+
         }
 
         classements = genererClassement();
     }
 
     @Override
-    public void register(S sportif) {
+    public void register(S aInscrire) {
 
         // n'est pas termine
         if( isTerminee()  )
@@ -52,24 +65,28 @@ public class Competition<S extends Sportif> implements iCompetition<S> {
             throw new LimiteAtteinteException(limiteParticipant);
 
         // doit etre non inscrit+
-        if( participants.containsKey(sportif) )
-            throw new IllegalArgumentException("sportif déjà inscrit");
+        if( participants.containsKey(aInscrire) )
+            throw new IllegalArgumentException("s déjà inscrit");
 
-        participants.put(sportif, null);
+        participants.put(aInscrire, null);
+    }
+
+    public Map<S, Integer> getParticipants() {
+        return participants;
     }
 
     @Override
-    public void deregister(Sportif sportif) {
+    public void deregister(S s) {
 
         // deja terminée
         if( isTerminee()  )
             throw new EtatCompetitionException(isTerminee() , false);
 
         // n'existe pas
-        if( !participants.containsKey(sportif) )
-            throw new IllegalArgumentException("sportif non inscrit");
+        if( !participants.containsKey(s) )
+            throw new IllegalArgumentException("s non inscrit");
 
-        participants.remove(sportif);
+        participants.remove(s);
     }
 
     @Override
@@ -81,26 +98,19 @@ public class Competition<S extends Sportif> implements iCompetition<S> {
         Collection<Integer> values = participants.values();
         int maxPerf = 0;
         for (Integer value : values) {
-            if( value > maxPerf )
+            if( value > maxPerf ) {
                 maxPerf = value;
+            }
         }
-
+        System.out.println(maxPerf);
         Set<S> gagnants = new HashSet<>();
         for (Map.Entry<S, Integer> entry : participants.entrySet()) {
             if( entry.getValue() == maxPerf )
                 gagnants.add(entry.getKey() );
         }
-
-//        int maxPerf = participants.values()
-//                .stream()
-//                .mapToInt(i -> i)
-//                .max()
-//                .getAsInt();
-
-//        Set<Sportif> gagnants = participants.entrySet().stream()
-//                .filter( e -> e.getValue() == maxPerf )
-//                .map( Map.Entry::getKey )
-//                .collect(Collectors.toSet());
+        for (S gagnant : gagnants) {
+            gagnant.setTotalAward(award/gagnants.size());
+        }
 
         return gagnants;
     }
@@ -141,6 +151,39 @@ public class Competition<S extends Sportif> implements iCompetition<S> {
         }
 
         return classement;
+    }
+
+    public void registerGroup(Collection<? extends S> aInscrire){
+        for (S s : aInscrire) {
+            register(s);
+            System.out.println(s);
+        }
+    }
+
+    public void transfertParticipants(Competition<? super S> autreCompet){
+        autreCompet.registerGroup( participants.keySet() );
+    }
+
+    // Créer une compétition non terminée sur base d'une autre.
+    // Elle aura les mêmes participants
+    public static <T extends Sportif> Competition<T> fusionner(Competition<? extends T> membre1, Competition<? extends T> membre2){
+
+        Competition<T> compet = new Competition<>(localisation);
+        membre1.transfertParticipants(compet);
+        membre2.transfertParticipants(compet);
+        return compet;
+
+    }
+
+    public <O extends S> Set<O> getOfType( Class<O> clazz ){
+        Set<O> set = new HashSet<>();
+
+        for (S part : participants.keySet()) {
+            if(part != null && part.getClass().equals(clazz))
+                set.add((O)part);
+        }
+
+        return set;
     }
 
     public List<Sportif> getClassements() {

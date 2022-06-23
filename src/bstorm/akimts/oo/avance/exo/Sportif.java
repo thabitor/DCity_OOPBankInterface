@@ -8,10 +8,13 @@ abstract class Sportif {
     private String prenom;
     private Integer anneeNaiss;
 
+    private double totalAward;
+
     public Sportif(String nom, String prenom, Integer anneeNaiss) {
         this.nom = nom;
         this.prenom = prenom;
         this.anneeNaiss = anneeNaiss;
+        this.totalAward  = 0;
     }
 
     public int performer() {
@@ -40,5 +43,19 @@ abstract class Sportif {
 
     public void setAnneeNaiss(Integer anneeNaiss) {
         this.anneeNaiss = anneeNaiss;
+    }
+
+    public void setTotalAward(double award) {
+        this.totalAward += award;
+    }
+
+    @Override
+    public String toString() {
+        return "Sportif{" +
+                "nom='" + nom + '\'' +
+                ", prenom='" + prenom + '\'' +
+                ", anneeNaiss=" + anneeNaiss +
+                ", totalAward=" + totalAward +
+                '}';
     }
 }
